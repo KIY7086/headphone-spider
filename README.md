@@ -46,12 +46,14 @@ paru -S google-chrome
 1. 访问 [GitHub Release 页面](https://github.com/kiy7086/headphone-spider/releases)
 2. 找到最新的 Release 版本
 3. 根据你的操作系统下载对应的编译文件：
-   - Windows 用户下载 `Windows-x86_64-headphone-spider.exe`
-   - Windows 32位用户下载 `Windows-x86-headphone-spider.exe`
-   - macOS 用户下载 `macOS-x86_64-headphone-spider`
+   - Windows 64位用户下载 `Windows-amd64-headphone-spider.exe`
+   - Windows 32位用户下载 `Windows-386-headphone-spider.exe`
+   - macOS 64位用户下载 `macOS-amd64-headphone-spider`
    - Apple Silicon用户下载 `macOS-arm64-headphone-spider`
-   - Linux 用户下载 `Linux-x86_64-headphone-spider`
-   - Linux Arm（Android Termux或树莓派等）用户下载 `Linux-arm64-headphone-spider`
+   - Linux 64位用户下载 `Linux-amd64-headphone-spider`
+   - Linux 32位用户下载 `Linux-386-headphone-spider`
+   - Linux ARM 64位用户下载 `Linux-arm64-headphone-spider`
+   - Linux ARM 32位用户下载 `Linux-arm-headphone-spider`
 
 #### 方法二：从源码编译
 
