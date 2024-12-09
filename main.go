@@ -13,8 +13,11 @@ const (
 func main() {
 	// 检查命令行参数
 	if len(os.Args) < 2 {
-		fmt.Println("使用方法: ./程序名 <URL>")
-		fmt.Println("示例: ./程序名 https://huihifi.com/evaluation/xxx")
+		fmt.Println("使用方法: ./headphone-spider <URL>")
+		fmt.Println("支持的URL类型:")
+		fmt.Println("1. https://huihifi.com/evaluation/xxx")
+		fmt.Println("2. https://rtings.com/headphones/reviews/xxx")
+		fmt.Println("示例: ./headphone-spider https://huihifi.com/evaluation/5e14542b-be71-49e8-add2-d6177bf900dc")
 		os.Exit(1)
 	}
 
