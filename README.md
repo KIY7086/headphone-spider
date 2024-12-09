@@ -79,7 +79,7 @@ go build
 
 ### 使用方法
 
-1. 打开终端（Windows 用户可以使用命令提示符或 PowerShell）
+1. 打开终端（Windows 用户可以使��命令提示符或 PowerShell）
 2. 导航到下载的文件所在的目录
 3. 运行以下命令来抓取数据：
 
@@ -97,6 +97,39 @@ go build
 
 - `https://huihifi.com/evaluation/xxx`
 - `https://rtings.com/headphones/reviews/xxx`
+- `https://squig.link/?share=xxx`
+- `https://pw.squig.link/?share=xxx`
+- `https://graph.hangout.audio/iem/xxx/?share=xxx`
+- `https://earphonesarchive.squig.link/headphones/?share=xxx`
+- 以及其他使用相同数据格式的网站
+
+### 使用说明
+
+#### Squig.Link 及相关网站
+
+当使用 Squig.Link 或其相关网站（如 hangout.audio）时：
+
+1. URL 必须包含 `share` 参数
+2. 如果 URL 中包含多个耳机型号（以逗号分隔），程序会提示选择要下载的型号
+3. 程序会自动过滤掉 "Custom_Tilt" 选项
+4. 支持不同的数据格式（制表符分隔或 CSV）
+
+示例：
+```bash
+# 单个耳机型号
+./headphone-spider "https://pw.squig.link/?share=KZ_PRX"
+
+# 多个耳机型号
+./headphone-spider "https://earphonesarchive.squig.link/headphones/?share=Custom_Tilt,Apple_AirPods_Max"
+
+# Hangout Audio
+./headphone-spider "https://graph.hangout.audio/iem/5128/?share=AirPods_Pro_2_(ANC_on)"
+```
+
+注意：
+- 对于包含多个耳机型号的 URL，程序会提示用户选择要下载的型号
+- 程序会自动将下载的数据保存为 CSV 格式
+- 输出文件名将使用选择的耳机型号，空格会被保留
 
 ### 注意事项
 
