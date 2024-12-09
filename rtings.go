@@ -2,25 +2,18 @@ package main
 
 import (
 	"context"
-	"encoding/csv"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"regexp"
-	"strings"
 	"time"
 
 	"github.com/chromedp/chromedp"
 )
 
 func processRtings(url string) {
-	// 处理URL
-	baseURL := strings.Split(url, "?")[0]      // 删除?及后面的内容
-	url = baseURL + "?disabled=0:1:,0:2:,0:3:" // 添加新的参数
-
 	fmt.Printf("正在启动浏览器...\n")
-	fmt.Printf("处理后的URL: %s\n", url)
+	fmt.Printf("目标URL: %s\n", url)
 	fmt.Println("--------------------")
 
 	opts := chromedp.DefaultExecAllocatorOptions[:]
@@ -43,7 +36,6 @@ func processRtings(url string) {
 		chromedp.EmulateViewport(1920, 1080),
 		chromedp.Navigate(url),
 		chromedp.WaitVisible("rect", chromedp.ByQuery),
-		// 获取图表标题
 		chromedp.Text(".graph_tool_legend_section-header", &chartTitle, chromedp.ByQuery),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			fmt.Println("正在定位rect元素...")
@@ -78,24 +70,25 @@ func processRtings(url string) {
 				rectBox.Y+rectBox.Height/2,
 			).Do(ctx)
 		}),
-		// 提取表格内容
 		chromedp.Evaluate(`
 			(() => {
 				const tables = document.getElementsByTagName('table');
 				if (tables.length > 0) {
 					const rows = tables[0].getElementsByTagName('tr');
-					let result = [];
+					let csvContent = '';
 					for (let i = 2; i < rows.length; i++) {
 						const cells = rows[i].getElementsByTagName('td');
-						if (cells.length >= 2) {
-							let freq = cells[0].textContent.replace(/,/g, '');
-							let value = cells[1].textContent.replace(/,/g, '');
-							result.push([freq, value]);
+						// 检查是否有至少3列，且第3列不为空
+						if (cells.length >= 3 && cells[2].textContent.trim() !== '') {
+							// 只取第1列和第3列的值
+							const col1 = cells[0].textContent.replace(/,/g, '').trim();
+							const col3 = cells[2].textContent.replace(/,/g, '').trim();
+							csvContent += col1 + ',' + col3 + '\n';
 						}
 					}
-					return JSON.stringify(result);
+					return csvContent;
 				}
-				return '[]';
+				return '';
 			})()
 		`, &tableContent),
 	)
@@ -108,13 +101,6 @@ func processRtings(url string) {
 	chartTitle = regexp.MustCompile(`[\\/:*?"<>|]`).ReplaceAllString(chartTitle, "_")
 	csvFilename := chartTitle + ".csv"
 
-	// 解析JSON数据
-	var data [][]string
-	err = json.Unmarshal([]byte(tableContent), &data)
-	if err != nil {
-		log.Fatal("解析表格数据失败:", err)
-	}
-
 	// 创建CSV文件
 	csvFile, err := os.Create(csvFilename)
 	if err != nil {
@@ -122,15 +108,10 @@ func processRtings(url string) {
 	}
 	defer csvFile.Close()
 
-	// 创建CSV writer
-	writer := csv.NewWriter(csvFile)
-	defer writer.Flush()
-
-	// 写入数据
-	for _, row := range data {
-		if err := writer.Write(row); err != nil {
-			log.Fatal("写入CSV失败:", err)
-		}
+	// 直接写入CSV内容
+	_, err = csvFile.WriteString(tableContent)
+	if err != nil {
+		log.Fatal("写入CSV失败:", err)
 	}
 
 	fmt.Printf("数据已保存到: %s\n", csvFilename)

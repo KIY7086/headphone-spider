@@ -39,7 +39,9 @@ paru -S google-chrome
 
 ## 下载和使用
 
-### 从 GitHub Release 下载
+### 安装方法
+
+#### 方法一：直接下载编译好的文件（推荐）
 
 1. 访问 [GitHub Release 页面](https://github.com/kiy7086/headphone-spider/releases)
 2. 找到最新的 Release 版本
@@ -51,20 +53,27 @@ paru -S google-chrome
    - Linux 用户下载 `Linux-x86_64-headphone-spider`
    - Linux Arm（Android Termux或树莓派等）用户下载 `Linux-arm64-headphone-spider`
 
-预编译文件只在macOS下测试过，其他系统请自行尝试。
-
-### 从源码编译
+#### 方法二：从源码编译
 
 1. 克隆仓库
 ```bash
 git clone https://github.com/kiy7086/headphone-spider.git
+cd headphone-spider
 ```
 
-2. 使用 `go build` 命令编译 （需要先安装[Go](https://golang.org/dl/)）
+2. 安装依赖
 ```bash
-cd headphone-spider
-go build -o headphone-spider main.go
+go mod download
 ```
+
+3. 编译（需要先安装[Go](https://golang.org/dl/)）
+```bash
+go build
+```
+
+编译完成后会在当前目录生成可执行文件：
+- Windows系统下生成 `headphone-spider.exe`
+- macOS/Linux系统下生成 `headphone-spider`
 
 ### 使用方法
 
