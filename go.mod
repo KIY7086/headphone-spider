@@ -1,4 +1,4 @@
-module headphone_spider
+module github.com/kiy7086/headphone-spider
 
 go 1.23
 
