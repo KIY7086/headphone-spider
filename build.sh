@@ -40,4 +40,4 @@ echo "正在编译 Solaris 版本..."
 GOOS=solaris GOARCH=amd64 go build -o build/Solaris-amd64-headphone-spider
 
 echo "编译完成！所有文件已保存在 build 目录中" 
-gh release create
+gh release create ./build/*
